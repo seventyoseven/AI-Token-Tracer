@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- ============ SUBSCRIPTIONS ============ -->
+        <record id="demo_subscription_openai" model="ai_token_tracker.subscription">
+            <field name="name">OpenAI Enterprise Plan</field>
+            <field name="provider_id" ref="provider_openai"/>
+            <field name="monthly_budget_usd">2500.0</field>
+            <field name="state">active</field>
+            <field name="notes">Main subscription for GPT-4 and GPT-3.5 models</field>
+        </record>
+
+        <record id="demo_subscription_anthropic" model="ai_token_tracker.subscription">
+            <field name="name">Anthropic Pro</field>
+            <field name="provider_id" ref="provider_anthropic"/>
+            <field name="monthly_budget_usd">1500.0</field>
+            <field name="state">active</field>
+            <field name="notes">Claude models for complex reasoning tasks</field>
+        </record>
+
+        <record id="demo_subscription_groq" model="ai_token_tracker.subscription">
+            <field name="name">Groq Developer Access</field>
+            <field name="provider_id" ref="provider_groq"/>
+            <field name="monthly_budget_usd">800.0</field>
+            <field name="state">active</field>
+            <field name="notes">Fast inference for Llama and Mixtral models</field>
+        </record>
+
+        <record id="demo_subscription_google" model="ai_token_tracker.subscription">
+            <field name="name">Google AI Studio</field>
+            <field name="provider_id" ref="provider_google"/>
+            <field name="monthly_budget_usd">1000.0</field>
+            <field name="state">active</field>
+            <field name="notes">Gemini models for multimodal tasks</field>
+        </record>
+
+        <!-- ============ API KEYS ============ -->
+        <record id="demo_api_key_openai_rd" model="ai_token_tracker.api_key">
+            <field name="name">R&amp;D Team - OpenAI</field>
+            <field name="subscription_id" ref="demo_subscription_openai"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">sk-demo-openai-rd-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_api_key_openai_support" model="ai_token_tracker.api_key">
+            <field name="name">Support Team - OpenAI</field>
+            <field name="subscription_id" ref="demo_subscription_openai"/>
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="key_value">sk-demo-openai-support-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_api_key_anthropic_rd" model="ai_token_tracker.api_key">
+            <field name="name">R&amp;D Team - Anthropic</field>
+            <field name="subscription_id" ref="demo_subscription_anthropic"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">sk-ant-demo-rd-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_api_key_groq" model="ai_token_tracker.api_key">
+            <field name="name">Production - Groq</field>
+            <field name="subscription_id" ref="demo_subscription_groq"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">gsk-demo-groq-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="demo_api_key_google" model="ai_token_tracker.api_key">
+            <field name="name">Analytics Team - Google</field>
+            <field name="subscription_id" ref="demo_subscription_google"/>
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="key_value">AIza-demo-google-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- ============ USAGE LOGS - R&D Activities (High Token Usage) ============ -->
+        <record id="demo_log_rd_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4o"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">45000</field>
+            <field name="completion_tokens">12000</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_rd_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4o"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">38000</field>
+            <field name="completion_tokens">10500</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_rd_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_5_sonnet"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">52000</field>
+            <field name="completion_tokens">15000</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_rd_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_5_sonnet"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">41000</field>
+            <field name="completion_tokens">13000</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_rd_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4_turbo"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">35000</field>
+            <field name="completion_tokens">9000</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=5)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <!-- ============ USAGE LOGS - Customer Support (Medium Token Usage) ============ -->
+        <record id="demo_log_support_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">12000</field>
+            <field name="completion_tokens">3500</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=12)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_support_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">8500</field>
+            <field name="completion_tokens">2800</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_support_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_70b"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">15000</field>
+            <field name="completion_tokens">4200</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_support_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_8b"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">9500</field>
+            <field name="completion_tokens">2500</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_support_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">11000</field>
+            <field name="completion_tokens">3200</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <!-- ============ USAGE LOGS - Marketing (Low-Medium Token Usage) ============ -->
+        <record id="demo_log_marketing_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_4o_mini"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">6500</field>
+            <field name="completion_tokens">2100</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=6)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_marketing_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_pro"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">8200</field>
+            <field name="completion_tokens">2800</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_marketing_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_flash"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">5500</field>
+            <field name="completion_tokens">1800</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_marketing_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_4o_mini"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">7100</field>
+            <field name="completion_tokens">2400</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <!-- ============ USAGE LOGS - General/Analysis (Low Token Usage) ============ -->
+        <record id="demo_log_general_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_8b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">3200</field>
+            <field name="completion_tokens">950</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_general_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_mixtral_8x7b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">4500</field>
+            <field name="completion_tokens">1200</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=18)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_general_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_flash"/>
+            <field name="purpose_category">analysis</field>
+            <field name="prompt_tokens">5800</field>
+            <field name="completion_tokens">1600</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_general_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_haiku"/>
+            <field name="purpose_category">analysis</field>
+            <field name="prompt_tokens">6200</field>
+            <field name="completion_tokens">1900</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_general_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_70b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">4100</field>
+            <field name="completion_tokens">1100</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(days=3)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <!-- ============ ADDITIONAL RECENT LOGS FOR DIVERSITY ============ -->
+        <record id="demo_log_recent_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4_turbo"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">28000</field>
+            <field name="completion_tokens">7500</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=2)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_recent_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">7800</field>
+            <field name="completion_tokens">2300</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=4)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_recent_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_opus"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">62000</field>
+            <field name="completion_tokens">18000</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=8)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_recent_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_demo"/>
+            <field name="api_key_id" ref="demo_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_pro"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">9200</field>
+            <field name="completion_tokens">3100</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=10)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <record id="demo_log_recent_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="demo_api_key_groq"/>
+            <field name="model_id" ref="model_mixtral_8x22b"/>
+            <field name="purpose_category">analysis</field>
+            <field name="prompt_tokens">11500</field>
+            <field name="completion_tokens">3800</field>
+            <field name="timestamp" eval="(DateTime.now() - timedelta(hours=15)).strftime('%Y-%m-%d %H:%M:%S')"/>
+        </record>
+
+        <!-- ============ OPTIMIZATION SUGGESTIONS ============ -->
+        <record id="demo_suggestion_01" model="ai_token_tracker.suggestion">
+            <field name="title">Switch to GPT-4o-mini for Support Tasks</field>
+            <field name="suggestion_type">cost</field>
+            <field name="priority">high</field>
+            <field name="description">Analysis shows that 60% of support queries are using GPT-3.5-turbo. Switching to GPT-4o-mini could reduce costs by 40% while maintaining quality.</field>
+            <field name="estimated_savings_usd">180.00</field>
+            <field name="estimated_energy_savings_kwh">2.5</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="demo_suggestion_02" model="ai_token_tracker.suggestion">
+            <field name="title">Optimize R&amp;D Token Usage with Caching</field>
+            <field name="suggestion_type">performance</field>
+            <field name="priority">medium</field>
+            <field name="description">R&amp;D team frequently re-processes similar context. Implementing prompt caching could reduce token usage by 25%.</field>
+            <field name="estimated_savings_usd">250.00</field>
+            <field name="estimated_energy_savings_kwh">3.8</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="demo_suggestion_03" model="ai_token_tracker.suggestion">
+            <field name="title">Use Groq for Time-Sensitive Support Queries</field>
+            <field name="suggestion_type">both</field>
+            <field name="priority">medium</field>
+            <field name="description">Groq's Llama 3 70B offers 10x faster inference at 30% lower cost for straightforward support queries.</field>
+            <field name="estimated_savings_usd">120.00</field>
+            <field name="estimated_energy_savings_kwh">1.8</field>
+            <field name="state">in_progress</field>
+        </record>
+
+        <record id="demo_suggestion_04" model="ai_token_tracker.suggestion">
+            <field name="title">Reduce Completion Token Limits</field>
+            <field name="suggestion_type">cost</field>
+            <field name="priority">low</field>
+            <field name="description">Average completion tokens are 40% lower than max_tokens setting. Optimizing limits can reduce unnecessary costs.</field>
+            <field name="estimated_savings_usd">85.00</field>
+            <field name="estimated_energy_savings_kwh">1.2</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="demo_suggestion_05" model="ai_token_tracker.suggestion">
+            <field name="title">Schedule off-peak hours for non-urgent analysis</field>
+            <field name="suggestion_type">energy</field>
+            <field name="priority">low</field>
+            <field name="description">Running analysis tasks during off-peak hours (2-6 AM) when grid carbon intensity is 25% lower.</field>
+            <field name="estimated_savings_usd">15.00</field>
+            <field name="estimated_energy_savings_kwh">5.5</field>
+            <field name="state">implemented</field>
+        </record>
+    </data>
+</odoo>
