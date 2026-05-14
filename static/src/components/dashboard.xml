@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="AI_token_tracker.Dashboard">
+        <div class="ai_monitor_dashboard">
+            <!-- Header -->
+            <div class="dashboard-header mb-4">
+                <h2>AI Monitor Dashboard</h2>
+                <p class="text-muted">Overview of AI usage, costs, and environmental impact</p>
+            </div>
+
+            <!-- Key Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card stat-card bg-primary text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fa fa-key"/> Subscriptions
+                            </h5>
+                            <h2 class="mb-0">
+                                <t t-esc="state.stats.active_subscriptions"/>/<t t-esc="state.stats.total_subscriptions"/>
+                            </h2>
+                            <small>Active / Total</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card bg-success text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fa fa-dollar"/> This Month
+                            </h5>
+                            <h2 class="mb-0">
+                                <t t-esc="formatCurrency(state.stats.total_cost_this_month)"/>
+                            </h2>
+                            <small><t t-esc="formatNumber(state.stats.total_usage_this_month)"/> API Calls</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card bg-info text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fa fa-bolt"/> Energy Used
+                            </h5>
+                            <h2 class="mb-0">
+                                <t t-esc="state.stats.total_energy_kwh.toFixed(2)"/>
+                            </h2>
+                            <small>kWh</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="card stat-card bg-warning text-white">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <i class="fa fa-leaf"/> CO2 Emissions
+                            </h5>
+                            <h2 class="mb-0">
+                                <t t-esc="state.stats.total_co2_kg.toFixed(2)"/>
+                            </h2>
+                            <small>kg CO2</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Alerts -->
+            <div class="row mb-4" t-if="state.stats.over_budget_count > 0">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <i class="fa fa-exclamation-triangle"/> 
+                        <strong>Budget Alert:</strong> 
+                        <t t-esc="state.stats.over_budget_count"/> subscription(s) over budget!
+                        <button class="btn btn-sm btn-outline-danger float-end" t-on-click="openSubscriptions">
+                            View Subscriptions
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Row -->
+            <div class="row">
+                <!-- Top Models -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fa fa-microchip"/> Top Models by Usage
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm table-hover" t-if="state.top_models.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>Model</th>
+                                        <th class="text-end">Calls</th>
+                                        <th class="text-end">Cost</th>
+                                        <th class="text-end">Tokens</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.top_models" t-as="model" t-key="model.name">
+                                        <td><t t-esc="model.name"/></td>
+                                        <td class="text-end"><t t-esc="formatNumber(model.count)"/></td>
+                                        <td class="text-end"><t t-esc="formatCurrency(model.cost)"/></td>
+                                        <td class="text-end"><t t-esc="formatNumber(model.tokens)"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center text-muted py-4" t-else="">
+                                <i class="fa fa-inbox fa-3x mb-3"/>
+                                <p>No usage data yet</p>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-sm btn-primary" t-on-click="openModels">
+                                    View All Models
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Subscriptions -->
+                <div class="col-md-6 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fa fa-key"/> Active Subscriptions
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div t-if="state.subscriptions.length > 0">
+                                <div t-foreach="state.subscriptions" t-as="sub" t-key="sub.id" 
+                                     class="subscription-item mb-3 p-2 border-start border-3"
+                                     t-attf-class="border-{{sub.state === 'active' ? 'success' : 'warning'}}">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <strong><t t-esc="sub.name"/></strong>
+                                            <br/>
+                                            <small class="text-muted">
+                                                Budget: <t t-esc="formatCurrency(sub.current_month_cost)"/> / 
+                                                <t t-esc="formatCurrency(sub.monthly_budget)"/>
+                                            </small>
+                                        </div>
+                                        <span t-attf-class="badge bg-{{sub.state === 'active' ? 'success' : 'warning'}}">
+                                            <t t-esc="sub.state"/>
+                                        </span>
+                                    </div>
+                                    <div class="progress mt-2" style="height: 5px;">
+                                        <div class="progress-bar" 
+                                             t-attf-class="bg-{{sub.budget_consumption_pct >= 100 ? 'danger' : sub.budget_consumption_pct >= 80 ? 'warning' : 'success'}}"
+                                             t-attf-style="width: {{Math.min(sub.budget_consumption_pct, 100)}}%"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center text-muted py-4" t-else="">
+                                <i class="fa fa-inbox fa-3x mb-3"/>
+                                <p>No subscriptions yet</p>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-sm btn-primary" t-on-click="openSubscriptions">
+                                    View All Subscriptions
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Usage -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header bg-light">
+                            <h5 class="mb-0">
+                                <i class="fa fa-history"/> Recent API Calls
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <table class="table table-sm table-hover" t-if="state.recent_usage.length > 0">
+                                <thead>
+                                    <tr>
+                                        <th>Timestamp</th>
+                                        <th>Subscription</th>
+                                        <th>Model</th>
+                                        <th class="text-end">Tokens</th>
+                                        <th class="text-end">Cost</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.recent_usage" t-as="log" t-key="log.id">
+                                        <td><t t-esc="formatDate(log.timestamp)"/></td>
+                                        <td><t t-esc="log.subscription_id[1]"/></td>
+                                        <td><t t-esc="log.model_id[1]"/></td>
+                                        <td class="text-end"><t t-esc="formatNumber(log.total_tokens)"/></td>
+                                        <td class="text-end"><t t-esc="formatCurrency(log.cost)"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="text-center text-muted py-4" t-else="">
+                                <i class="fa fa-inbox fa-3x mb-3"/>
+                                <p>No usage logs yet</p>
+                            </div>
+                            <div class="text-end mt-3">
+                                <button class="btn btn-sm btn-primary" t-on-click="openUsageLogs">
+                                    View All Logs
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
