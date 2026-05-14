@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ai_provider_user,AI Provider User,model_ai_token_tracker_provider,group_ai_token_tracker_user,1,0,0,0
+access_ai_provider_manager,AI Provider Manager,model_ai_token_tracker_provider,group_ai_token_tracker_manager,1,1,1,1
+access_ai_model_user,AI Model User,model_ai_token_tracker_model,group_ai_token_tracker_user,1,0,0,0
+access_ai_model_manager,AI Model Manager,model_ai_token_tracker_model,group_ai_token_tracker_manager,1,1,1,1
+access_ai_grid_user,AI Grid User,model_ai_token_tracker_grid_intensity,group_ai_token_tracker_user,1,0,0,0
+access_ai_grid_manager,AI Grid Manager,model_ai_token_tracker_grid_intensity,group_ai_token_tracker_manager,1,1,1,1
+access_ai_sub_user,AI Subscription User,model_ai_token_tracker_subscription,group_ai_token_tracker_user,1,0,0,0
+access_ai_sub_manager,AI Subscription Manager,model_ai_token_tracker_subscription,group_ai_token_tracker_manager,1,1,1,1
+access_ai_key_user,AI Key User,model_ai_token_tracker_api_key,group_ai_token_tracker_user,1,1,1,1
+access_ai_key_manager,AI Key Manager,model_ai_token_tracker_api_key,group_ai_token_tracker_manager,1,1,1,1
+access_ai_log_user,AI Log User,model_ai_token_tracker_usage_log,group_ai_token_tracker_user,1,1,1,1
+access_ai_log_manager,AI Log Manager,model_ai_token_tracker_usage_log,group_ai_token_tracker_manager,1,1,1,1
+access_ai_suggest_user,AI Suggestion User,model_ai_token_tracker_suggestion,group_ai_token_tracker_user,1,1,0,0
+access_ai_suggest_manager,AI Suggestion Manager,model_ai_token_tracker_suggestion,group_ai_token_tracker_manager,1,1,1,1
