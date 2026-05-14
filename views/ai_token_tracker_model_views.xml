@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_model_tree" model="ir.ui.view">
+        <field name="name">ai.model.tree</field>
+        <field name="model">ai_token_tracker.model</field>
+        <field name="arch" type="xml">
+            <list string="AI Model Benchmarks" default_order="performance_tier, cost_per_prompt_token_usd">
+                <field name="name"/>
+                <field name="provider_id"/>
+                <field name="model_key"/>
+                <field name="performance_tier"/>
+                <field name="cost_prompt_display" string="Cost/Prompt Token (USD)"/>
+                <field name="cost_completion_display" string="Cost/Completion Token (USD)"/>
+                <field name="energy_kwh_per_1k_tokens" digits="[0, 8]"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="view_ai_model_form" model="ir.ui.view">
+        <field name="name">ai.model.form</field>
+        <field name="model">ai_token_tracker.model</field>
+        <field name="arch" type="xml">
+            <form string="AI Model Benchmark">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g., GPT-4o"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model_key"/>
+                            <field name="provider_id"/>
+                            <field name="active"/>
+                        </group>
+                        <group>
+                            <field name="performance_tier"/>
+                            <field name="grid_intensity_id"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Cost &amp; Energy Benchmarks">
+                            <group>
+                                <label for="cost_per_prompt_token_usd"/>
+                                <div>
+                                    <field name="cost_per_prompt_token_usd" nolabel="1"/>
+                                    <span> USD per prompt token</span>
+                                </div>
+                                <label for="cost_per_completion_token_usd"/>
+                                <div>
+                                    <field name="cost_per_completion_token_usd" nolabel="1"/>
+                                    <span> USD per completion token</span>
+                                </div>
+                                <label for="energy_kwh_per_1k_tokens"/>
+                                <div>
+                                    <field name="energy_kwh_per_1k_tokens" nolabel="1"/>
+                                    <span> kWh per 1,000 total tokens</span>
+                                </div>
+                            </group>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Notes on benchmark source, etc..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>

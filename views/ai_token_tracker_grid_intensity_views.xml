@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_grid_intensity_tree" model="ir.ui.view">
+        <field name="name">ai.grid.intensity.tree</field>
+        <field name="model">ai_token_tracker.grid_intensity</field>
+        <field name="arch" type="xml">
+            <list string="Grid Carbon Intensity" editable="bottom">
+                <field name="name"/>
+                <field name="co2g_per_kwh"/>
+                <field name="notes"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="view_ai_grid_intensity_form" model="ir.ui.view">
+        <field name="name">ai.grid.intensity.form</field>
+        <field name="model">ai_token_tracker.grid_intensity</field>
+        <field name="arch" type="xml">
+            <form string="Grid Carbon Intensity">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="co2g_per_kwh"/>
+                        <field name="notes"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_grid_intensity_search" model="ir.ui.view">
+        <field name="name">ai.grid.intensity.search</field>
+        <field name="model">ai_token_tracker.grid_intensity</field>
+        <field name="arch" type="xml">
+            <search string="Search Grid Intensity">
+                <field name="name"/>
+                <field name="notes"/>
+                <filter name="group_by_region" string="Region" context="{'group_by': 'name'}"/>
+            </search>
+        </field>
+    </record>
+</odoo>

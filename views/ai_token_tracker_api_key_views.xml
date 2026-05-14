@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_api_key_tree" model="ir.ui.view">
+        <field name="name">ai.api.key.tree</field>
+        <field name="model">ai_token_tracker.api_key</field>
+        <field name="arch" type="xml">
+            <list string="API Keys">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="subscription_id"/>
+                <field name="provider_id"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="view_ai_api_key_form" model="ir.ui.view">
+        <field name="name">ai.api.key.form</field>
+        <field name="model">ai_token_tracker.api_key</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_revoke" type="object" string="Revoke" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,revoked"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="API Key Name" placeholder="e.g., Marketing Team - OpenAI Key"/>
+                            <field name="subscription_id"/>
+                            <field name="provider_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="key_value" password="True" placeholder="sk-..."/>
+                        </group>
+                    </group>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

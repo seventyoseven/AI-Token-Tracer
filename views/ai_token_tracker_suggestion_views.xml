@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_suggestion_kanban" model="ir.ui.view">
+        <field name="name">ai.suggestion.kanban</field>
+        <field name="model">ai_token_tracker.suggestion</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state">
+                <field name="state"/>
+                <field name="model_to_replace_id"/>
+                <field name="suggested_model_id"/>
+                <field name="potential_cost_saving_usd"/>
+                <field name="potential_energy_saving_kwh"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_card">
+                                <div class="o_kanban_record_top">
+                                    <div class="o_kanban_record_headings">
+                                        <strong><field name="name"/></strong>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_body">
+                                    <div>
+                                        Current: <field name="model_to_replace_id"/>
+                                    </div>
+                                    <div>
+                                        Suggest: <field name="suggested_model_id"/>
+                                    </div>
+                                    <hr/>
+                                    <strong>Potential Savings:</strong>
+                                    <div>
+                                        <field name="potential_cost_saving_usd" widget="monetary"/>
+                                        (Cost)
+                                    </div>
+                                    <div>
+                                        <field name="potential_energy_saving_kwh" widget="float" digits="[48, 5]"/>
+                                        kWh (Energy)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="view_ai_suggestion_form" model="ir.ui.view">
+        <field name="name">ai.suggestion.form</field>
+        <field name="model">ai_token_tracker.suggestion</field>
+        <field name="arch" type="xml">
+            <form string="Optimization Suggestion">
+                <header>
+                    <button name="action_review" type="object" string="Start Review"
+                        class="oe_highlight" invisible="state!= 'new'"/>
+                    <button name="write" context="{'state': 'implemented'}" type="object" string="Mark as Implemented"
+                        class="oe_highlight" invisible="state!= 'reviewing'"/>
+                    <button name="action_reject" type="object" string="Reject"
+                        invisible="state in ['implemented', 'rejected']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,reviewing,implemented"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="model_to_replace_id"/>
+                            <field name="suggested_model_id"/>
+                            <field name="analysis_date"/>
+                        </group>
+                        <group>
+                            <field name="potential_cost_saving_usd" widget="monetary"/>
+                            <field name="potential_energy_saving_kwh"/>
+                            <field name="actual_cost_saving_usd" widget="monetary"
+                                invisible="actual_cost_saving_usd == 0"/>
+                            <field name="actual_energy_saving_kwh"
+                                invisible="actual_energy_saving_kwh == 0"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Source Logs">
+                            <field name="origin_usage_log_ids" readonly="1"/>
+                        </page>
+                        <page string="Notes">
+                            <field name="rejection_reason" 
+                                placeholder="If rejecting, please explain why..."
+                                invisible="state!= 'rejected'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Root menu for AI Token Tracker -->
+        <menuitem id="menu_ai_token_tracker_root"
+            name="AI Token Tracker"
+            sequence="10"
+            web_icon="ai_token_tracker,static/description/icon.png"
+        />
+
+        <record id="action_ai_token_tracker_dashboard_client" model="ir.actions.client">
+            <field name="name">CSR &amp; Efficiency Dashboard</field>
+            <field name="tag">ai_token_tracker.dashboard</field>
+        </record>
+
+        <menuitem id="menu_ai_token_tracker_dashboard"
+            name="Dashboard"
+            parent="menu_ai_token_tracker_root"
+            action="action_ai_token_tracker_dashboard_client"
+            sequence="1"/>
+
+        <record id="action_ai_usage_log" model="ir.actions.act_window">
+            <field name="name">AI Usage Logs</field>
+            <field name="res_model">ai_token_tracker.usage_log</field>
+            <field name="view_mode">list,form,graph,pivot</field>
+        </record>
+
+        <menuitem id="menu_ai_usage_log"
+            name="Usage Logs"
+            parent="menu_ai_token_tracker_root"
+            action="action_ai_usage_log"
+            sequence="5"/>
+              
+        <record id="action_ai_suggestion" model="ir.actions.act_window">
+            <field name="name">Optimization Suggestions</field>
+            <field name="res_model">ai_token_tracker.suggestion</field>
+            <field name="view_mode">kanban,form,list</field>
+        </record>
+
+        <menuitem id="menu_ai_suggestion"
+            name="Optimization"
+            parent="menu_ai_token_tracker_root"
+            action="action_ai_suggestion"
+            sequence="10"/>
+
+        <menuitem id="menu_ai_token_tracker_config"
+            name="Configuration"
+            parent="menu_ai_token_tracker_root"
+            sequence="100"/>
+              
+        <record id="action_ai_provider" model="ir.actions.act_window">
+            <field name="name">AI Providers</field>
+            <field name="res_model">ai_token_tracker.provider</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_ai_provider"
+            name="Providers"
+            parent="menu_ai_token_tracker_config"
+            action="action_ai_provider"
+            sequence="1"/>
+              
+        <record id="action_ai_model" model="ir.actions.act_window">
+            <field name="name">AI Model Benchmarks</field>
+            <field name="res_model">ai_token_tracker.model</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_ai_model"
+            name="Model Benchmarks"
+            parent="menu_ai_token_tracker_config"
+            action="action_ai_model"
+            sequence="5"/>
+              
+        <record id="action_ai_subscription" model="ir.actions.act_window">
+            <field name="name">Subscriptions</field>
+            <field name="res_model">ai_token_tracker.subscription</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_ai_subscription"
+            name="Subscriptions"
+            parent="menu_ai_token_tracker_config"
+            action="action_ai_subscription"
+            sequence="10"/>
+              
+        <record id="action_ai_api_key" model="ir.actions.act_window">
+            <field name="name">API Keys</field>
+            <field name="res_model">ai_token_tracker.api_key</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_ai_api_key"
+            name="API Keys"
+            parent="menu_ai_token_tracker_config"
+            action="action_ai_api_key"
+            sequence="15"/>
+              
+        <record id="action_ai_grid_intensity" model="ir.actions.act_window">
+            <field name="name">Grid Carbon Intensity</field>
+            <field name="res_model">ai_token_tracker.grid_intensity</field>
+            <field name="view_mode">list,form</field>
+        </record>
+        <menuitem id="menu_ai_grid_intensity"
+            name="Grid Intensity Factors"
+            parent="menu_ai_token_tracker_config"
+            action="action_ai_grid_intensity"
+            sequence="20"/>
+    </data>
+</odoo>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_subscription_tree" model="ir.ui.view">
+        <field name="name">ai.subscription.tree</field>
+        <field name="model">ai_token_tracker.subscription</field>
+        <field name="arch" type="xml">
+            <list string="AI Subscriptions" decoration-danger="budget_utilization_percent > 90" decoration-warning="budget_utilization_percent > 75">
+                <field name="name"/>
+                <field name="provider_id"/>
+                <field name="state"/>
+                <field name="monthly_budget_usd" widget="monetary"/>
+                <field name="total_spend_current_month" widget="monetary"/>
+                <field name="budget_utilization_percent" widget="percentage" digits="[0, 1]"/>
+                <field name="analytic_account_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_subscription_form" model="ir.ui.view">
+        <field name="name">ai.subscription.form</field>
+        <field name="model">ai_token_tracker.subscription</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_activate" type="object" string="Activate"
+                        class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_expire" type="object" string="Expire"
+                        invisible="state != 'active'"/>
+                    <button name="action_draft" type="object" string="Set to Draft"
+                        invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,active,expired"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="Subscription Name" placeholder="e.g., Main OpenAI Enterprise Plan"/>
+                            <field name="provider_id"/>
+                            <field name="partner_id" string="Vendor"/>
+                        </group>
+                        <group>
+                            <field name="monthly_budget_usd"/>
+                            <field name="total_spend_current_month"/>
+                            <field name="budget_utilization_percent" widget="percentage"/>
+                            <field name="currency_id" invisible="1"/>
+                        </group>
+                    </group>
+                    <group string="Budget Forecast" invisible="state != 'active'">
+                        <group>
+                            <label for="predicted_next_month_spend" string="Projected Month-End"/>
+                            <div>
+                                <field name="predicted_next_month_spend" widget="monetary" class="oe_inline"/>
+                            </div>
+                            <label for="budget_health" string="Budget Status"/>
+                            <div>
+                                <field name="budget_health" widget="badge" 
+                                       decoration-success="budget_health == 'good'" 
+                                       decoration-warning="budget_health == 'warning'" 
+                                       decoration-danger="budget_health == 'danger'"/>
+                            </div>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="notes" string="Notes" placeholder="Subscription details..."/>
+                    </group>
+                    <notebook>
+                        <page string="API Keys">
+                            <field name="api_key_ids" context="{'default_subscription_id': id}">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+</odoo>

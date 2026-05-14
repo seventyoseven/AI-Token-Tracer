@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_usage_log_tree" model="ir.ui.view">
+        <field name="name">ai.usage.log.tree</field>
+        <field name="model">ai_token_tracker.usage_log</field>
+        <field name="arch" type="xml">
+            <list string="AI Usage Logs"
+                decoration-warning="energy_consumed_kwh > 0.005"
+                decoration-danger="energy_consumed_kwh > 0.05">
+                <field name="create_date" string="Timestamp"/>
+                <field name="user_id"/>
+                <field name="model_id"/>
+                <field name="purpose_category"/>
+                <field name="total_tokens" sum="Total Tokens"/>
+                <field name="cost_usd" sum="Total Cost" widget="monetary"/>
+                <field name="energy_consumed_kwh" sum="Total Energy (kWh)"/>
+                <field name="co2_emissions_g" sum="Total CO2 (g)"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_ai_usage_log_form" model="ir.ui.view">
+        <field name="name">ai.usage.log.form</field>
+        <field name="model">ai_token_tracker.usage_log</field>
+        <field name="arch" type="xml">
+            <form string="AI Usage Log">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="user_id"/>
+                            <field name="api_key_id"/>
+                        </group>
+                        <group>
+                            <field name="model_id"/>
+                            <field name="purpose_category"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Usage &amp; Cost">
+                            <group>
+                                <field name="prompt_tokens"/>
+                                <field name="completion_tokens"/>
+                                <field name="total_tokens"/>
+                                <field name="cost_usd" widget="monetary"/>
+                            </group>
+                        </page>
+                        <page string="Environmental Impact">
+                            <group>
+                                <field name="energy_consumed_kwh"/>
+                                <field name="co2_emissions_g"/>
+                            </group>
+                        </page>
+                        <page string="Benchmark Snapshot (at creation)">
+                            <group>
+                                <field name="benchmark_cost_prompt_at_creation"/>
+                                <field name="benchmark_cost_completion_at_creation"/>
+                                <field name="benchmark_energy_kwh_per_1k_at_creation"/>
+                                <field name="benchmark_grid_co2g_kwh_at_creation"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_ai_usage_log_graph" model="ir.ui.view">
+        <field name="name">ai.usage.log.graph</field>
+        <field name="model">ai_token_tracker.usage_log</field>
+        <field name="arch" type="xml">
+            <graph string="AI Usage Analysis">
+                <field name="model_id" type="row"/>
+                <field name="energy_consumed_kwh" type="measure"/>
+            </graph>
+        </field>
+    </record>
+      
+    <record id="view_ai_usage_log_pivot" model="ir.ui.view">
+        <field name="name">ai.usage.log.pivot</field>
+        <field name="model">ai_token_tracker.usage_log</field>
+        <field name="arch" type="xml">
+            <pivot string="AI Usage Analysis">
+                <field name="model_id" type="row"/>
+                <field name="purpose_category" type="col"/>
+                <field name="cost_usd" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+</odoo>
