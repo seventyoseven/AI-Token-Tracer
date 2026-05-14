@@ -1,0 +1,3 @@
+# Icon Placeholder
+# Place your module icon (icon.png) in this directory
+# Recommended size: 256x256 pixels
