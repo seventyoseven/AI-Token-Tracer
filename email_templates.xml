@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Budget Alert Email Template -->
+        <record id="email_template_budget_alert" model="mail.template">
+            <field name="name">AI Monitor: Budget Alert</field>
+            <field name="model_id" ref="model_ai_monitor_subscription"/>
+            <field name="subject">Budget Alert: ${object.name} - ${object.budget_consumption_pct}% consumed</field>
+            <field name="email_from">${(object.company_id.email or user.email) | safe}</field>
+            <field name="email_to">${(object.create_uid.email or user.email) | safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+    <div style="background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <!-- Header -->
+        <div style="border-bottom: 3px solid #dc3545; padding-bottom: 20px; margin-bottom: 20px;">
+            <h1 style="color: #dc3545; margin: 0; font-size: 24px;">
+                <span style="font-size: 32px;">⚠️</span> Budget Alert
+            </h1>
+        </div>
+
+        <!-- Alert Message -->
+        <div style="background-color: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin-bottom: 20px;">
+            <p style="margin: 0; color: #856404; font-size: 16px;">
+                <strong>Your AI subscription has reached ${object.budget_consumption_pct:.0f}% of its monthly budget.</strong>
+            </p>
+        </div>
+
+        <!-- Subscription Details -->
+        <h2 style="color: #333; font-size: 18px; margin-top: 20px;">Subscription Details</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Subscription:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; font-weight: bold;">${object.name}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Provider:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6;">${object.provider_id.name}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Monthly Budget:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #198754;">
+                    ${object.monthly_budget} ${object.currency_id.symbol}
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Current Spending:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; font-weight: bold; color: #dc3545;">
+                    ${object.current_month_cost} ${object.currency_id.symbol}
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">API Calls This Month:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6;">${object.current_month_usage}</td>
+            </tr>
+        </table>
+
+        <!-- Progress Bar -->
+        <div style="margin: 20px 0;">
+            <div style="background-color: #e9ecef; border-radius: 4px; height: 24px; overflow: hidden;">
+                <div style="background-color: ${'#dc3545' if object.budget_consumption_pct >= 100 else '#ffc107' if object.budget_consumption_pct >= 80 else '#28a745'}; 
+                            height: 100%; 
+                            width: ${min(object.budget_consumption_pct, 100)}%; 
+                            display: flex; 
+                            align-items: center; 
+                            justify-content: center; 
+                            color: white; 
+                            font-weight: bold;
+                            font-size: 12px;">
+                    ${object.budget_consumption_pct:.0f}%
+                </div>
+            </div>
+        </div>
+
+        <!-- CSR Metrics -->
+        <h2 style="color: #333; font-size: 18px; margin-top: 20px;">Environmental Impact</h2>
+        <div style="display: flex; justify-content: space-between; margin: 15px 0;">
+            <div style="flex: 1; text-align: center; padding: 15px; background-color: #e7f3ff; border-radius: 8px; margin-right: 10px;">
+                <div style="font-size: 24px; font-weight: bold; color: #0d6efd;">${object.total_energy_kwh:.2f}</div>
+                <div style="color: #6c757d; font-size: 12px;">kWh Energy</div>
+            </div>
+            <div style="flex: 1; text-align: center; padding: 15px; background-color: #e7f9e7; border-radius: 8px;">
+                <div style="font-size: 24px; font-weight: bold; color: #198754;">${object.total_co2_kg:.2f}</div>
+                <div style="color: #6c757d; font-size: 12px;">kg CO2</div>
+            </div>
+        </div>
+
+        <!-- Action Button -->
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="${object.get_base_url()}/web#id=${object.id}&amp;model=ai_monitor.subscription&amp;view_type=form"
+               style="display: inline-block; 
+                      padding: 12px 30px; 
+                      background-color: #0d6efd; 
+                      color: white; 
+                      text-decoration: none; 
+                      border-radius: 6px; 
+                      font-weight: bold;">
+                View Subscription Details
+            </a>
+        </div>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #dee2e6; padding-top: 20px; margin-top: 20px; text-align: center; color: #6c757d; font-size: 12px;">
+            <p>This is an automated alert from your AI Monitor system.</p>
+            <p>To modify alert thresholds, please update your subscription settings.</p>
+        </div>
+    </div>
+</div>
+            </field>
+        </record>
+
+        <!-- Monthly CSR Report Template -->
+        <record id="email_template_monthly_report" model="mail.template">
+            <field name="name">AI Monitor: Monthly CSR Report</field>
+            <field name="model_id" ref="model_ai_monitor_subscription"/>
+            <field name="subject">Monthly AI Usage &amp; CSR Report - ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or user.email) | safe}</field>
+            <field name="email_to">${(object.create_uid.email or user.email) | safe}</field>
+            <field name="body_html" type="html">
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f8f9fa;">
+    <div style="background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <!-- Header -->
+        <div style="border-bottom: 3px solid #0d6efd; padding-bottom: 20px; margin-bottom: 20px;">
+            <h1 style="color: #0d6efd; margin: 0; font-size: 24px;">
+                📊 Monthly AI Usage Report
+            </h1>
+            <p style="color: #6c757d; margin-top: 10px;">${object.name}</p>
+        </div>
+
+        <!-- Summary -->
+        <h2 style="color: #333; font-size: 18px;">Usage Summary</h2>
+        <table style="width: 100%; border-collapse: collapse; margin: 15px 0;">
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Total API Calls:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; font-weight: bold;">${object.current_month_usage}</td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Total Cost:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; font-weight: bold;">
+                    ${object.current_month_cost} ${object.currency_id.symbol}
+                </td>
+            </tr>
+            <tr>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6; color: #6c757d;">Budget Used:</td>
+                <td style="padding: 10px; border-bottom: 1px solid #dee2e6;">${object.budget_consumption_pct:.1f}%</td>
+            </tr>
+        </table>
+
+        <!-- Environmental Impact -->
+        <h2 style="color: #333; font-size: 18px; margin-top: 20px;">Environmental Impact</h2>
+        <div style="background-color: #e7f9e7; border-left: 4px solid #198754; padding: 15px; margin: 15px 0;">
+            <p style="margin: 5px 0;"><strong>Energy Consumption:</strong> ${object.total_energy_kwh:.2f} kWh</p>
+            <p style="margin: 5px 0;"><strong>Carbon Emissions:</strong> ${object.total_co2_kg:.2f} kg CO2</p>
+        </div>
+
+        <!-- Footer -->
+        <div style="border-top: 1px solid #dee2e6; padding-top: 20px; margin-top: 20px; text-align: center; color: #6c757d; font-size: 12px;">
+            <p>Thank you for monitoring your AI usage responsibly.</p>
+        </div>
+    </div>
+</div>
+            </field>
+        </record>
+    </data>
+</odoo>

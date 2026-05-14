@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="grid_global_average" model="ai_token_tracker.grid_intensity">
+            <field name="name">Global Average</field>
+            <field name="co2g_per_kwh">436.0</field>
+        </record>
+        <record id="grid_us_average" model="ai_token_tracker.grid_intensity">
+            <field name="name">USA Average</field>
+            <field name="co2g_per_kwh">372.0</field>
+        </record>
+        <record id="grid_us_east_virginia" model="ai_token_tracker.grid_intensity">
+            <field name="name">US East (Virginia)</field>
+            <field name="co2g_per_kwh">298.0</field>
+        </record>
+        <record id="grid_eu_ireland" model="ai_token_tracker.grid_intensity">
+            <field name="name">EU (Ireland)</field>
+            <field name="co2g_per_kwh">257.0</field>
+        </record>
+        <record id="grid_eu_sweden" model="ai_token_tracker.grid_intensity">
+            <field name="name">EU (Sweden - Hydro/Nuclear)</field>
+            <field name="co2g_per_kwh">26.0</field>
+        </record>
+    </data>
+</odoo>

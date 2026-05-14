@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <!-- This file will be loaded as regular data, not demo data -->
+        <!-- So it loads on both install and upgrade -->
+        
+        <!-- ============ SUBSCRIPTIONS ============ -->
+        <record id="sample_subscription_openai" model="ai_token_tracker.subscription">
+            <field name="name">OpenAI Enterprise Plan</field>
+            <field name="provider_id" ref="provider_openai"/>
+            <field name="monthly_budget_usd">2500.0</field>
+            <field name="state">active</field>
+            <field name="notes">Main subscription for GPT-4 and GPT-3.5 models</field>
+        </record>
+
+        <record id="sample_subscription_anthropic" model="ai_token_tracker.subscription">
+            <field name="name">Anthropic Pro</field>
+            <field name="provider_id" ref="provider_anthropic"/>
+            <field name="monthly_budget_usd">1500.0</field>
+            <field name="state">active</field>
+            <field name="notes">Claude models for complex reasoning tasks</field>
+        </record>
+
+        <record id="sample_subscription_groq" model="ai_token_tracker.subscription">
+            <field name="name">Groq Developer Access</field>
+            <field name="provider_id" ref="provider_groq"/>
+            <field name="monthly_budget_usd">800.0</field>
+            <field name="state">active</field>
+            <field name="notes">Fast inference for Llama and Mixtral models</field>
+        </record>
+
+        <record id="sample_subscription_google" model="ai_token_tracker.subscription">
+            <field name="name">Google AI Studio</field>
+            <field name="provider_id" ref="provider_google"/>
+            <field name="monthly_budget_usd">1000.0</field>
+            <field name="state">active</field>
+            <field name="notes">Gemini models for multimodal tasks</field>
+        </record>
+
+        <!-- ============ API KEYS ============ -->
+        <record id="sample_api_key_openai_rd" model="ai_token_tracker.api_key">
+            <field name="name">R&amp;D Team - OpenAI</field>
+            <field name="subscription_id" ref="sample_subscription_openai"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">sk-demo-openai-rd-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="sample_api_key_openai_support" model="ai_token_tracker.api_key">
+            <field name="name">Support Team - OpenAI</field>
+            <field name="subscription_id" ref="sample_subscription_openai"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">sk-demo-openai-support-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="sample_api_key_anthropic_rd" model="ai_token_tracker.api_key">
+            <field name="name">R&amp;D Team - Anthropic</field>
+            <field name="subscription_id" ref="sample_subscription_anthropic"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">sk-ant-demo-rd-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="sample_api_key_groq" model="ai_token_tracker.api_key">
+            <field name="name">Production - Groq</field>
+            <field name="subscription_id" ref="sample_subscription_groq"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">gsk-demo-groq-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <record id="sample_api_key_google" model="ai_token_tracker.api_key">
+            <field name="name">Analytics Team - Google</field>
+            <field name="subscription_id" ref="sample_subscription_google"/>
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="key_value">AIza-demo-google-key-encrypted</field>
+            <field name="state">active</field>
+        </record>
+
+        <!-- ============ USAGE LOGS - R&D Activities (High Token Usage) ============ -->
+        <record id="sample_log_rd_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4o"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">45000</field>
+            <field name="completion_tokens">12000</field>
+        </record>
+
+        <record id="sample_log_rd_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4o"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">38000</field>
+            <field name="completion_tokens">10500</field>
+        </record>
+
+        <record id="sample_log_rd_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_5_sonnet"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">52000</field>
+            <field name="completion_tokens">15000</field>
+        </record>
+
+        <record id="sample_log_rd_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_5_sonnet"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">41000</field>
+            <field name="completion_tokens">13000</field>
+        </record>
+
+        <record id="sample_log_rd_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_rd"/>
+            <field name="model_id" ref="model_gpt_4_turbo"/>
+            <field name="purpose_category">rd</field>
+            <field name="prompt_tokens">35000</field>
+            <field name="completion_tokens">9000</field>
+        </record>
+
+        <!-- ============ USAGE LOGS - Customer Support (Medium Token Usage) ============ -->
+        <record id="sample_log_support_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">12000</field>
+            <field name="completion_tokens">3500</field>
+        </record>
+
+        <record id="sample_log_support_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">8500</field>
+            <field name="completion_tokens">2800</field>
+        </record>
+
+        <record id="sample_log_support_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_70b"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">15000</field>
+            <field name="completion_tokens">4200</field>
+        </record>
+
+        <record id="sample_log_support_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_8b"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">9500</field>
+            <field name="completion_tokens">2500</field>
+        </record>
+
+        <record id="sample_log_support_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_3_5_turbo"/>
+            <field name="purpose_category">support</field>
+            <field name="prompt_tokens">11000</field>
+            <field name="completion_tokens">3200</field>
+        </record>
+
+        <!-- ============ USAGE LOGS - Marketing (Low-Medium Token Usage) ============ -->
+        <record id="sample_log_marketing_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_4o_mini"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">6500</field>
+            <field name="completion_tokens">2100</field>
+        </record>
+
+        <record id="sample_log_marketing_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_pro"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">8200</field>
+            <field name="completion_tokens">2800</field>
+        </record>
+
+        <record id="sample_log_marketing_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_flash"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">5500</field>
+            <field name="completion_tokens">1800</field>
+        </record>
+
+        <record id="sample_log_marketing_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_openai_support"/>
+            <field name="model_id" ref="model_gpt_4o_mini"/>
+            <field name="purpose_category">marketing</field>
+            <field name="prompt_tokens">7100</field>
+            <field name="completion_tokens">2400</field>
+        </record>
+
+        <!-- ============ USAGE LOGS - General/Analysis (Low Token Usage) ============ -->
+        <record id="sample_log_general_01" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_8b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">3200</field>
+            <field name="completion_tokens">950</field>
+        </record>
+
+        <record id="sample_log_general_02" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_groq"/>
+            <field name="model_id" ref="model_mixtral_8x7b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">4500</field>
+            <field name="completion_tokens">1200</field>
+        </record>
+
+        <record id="sample_log_general_03" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_google"/>
+            <field name="model_id" ref="model_gemini_1_5_flash"/>
+            <field name="purpose_category">internal</field>
+            <field name="prompt_tokens">5800</field>
+            <field name="completion_tokens">1600</field>
+        </record>
+
+        <record id="sample_log_general_04" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_anthropic_rd"/>
+            <field name="model_id" ref="model_claude_3_haiku"/>
+            <field name="purpose_category">internal</field>
+            <field name="prompt_tokens">6200</field>
+            <field name="completion_tokens">1900</field>
+        </record>
+
+        <record id="sample_log_general_05" model="ai_token_tracker.usage_log">
+            <field name="user_id" ref="base.user_admin"/>
+            <field name="api_key_id" ref="sample_api_key_groq"/>
+            <field name="model_id" ref="model_llama_3_70b"/>
+            <field name="purpose_category">general</field>
+            <field name="prompt_tokens">4100</field>
+            <field name="completion_tokens">1100</field>
+        </record>
+
+        <!-- ============ OPTIMIZATION SUGGESTIONS ============ -->
+        <record id="sample_suggestion_01" model="ai_token_tracker.suggestion">
+            <field name="model_to_replace_id" ref="model_gpt_3_5_turbo"/>
+            <field name="suggested_model_id" ref="model_gpt_4o_mini"/>
+            <field name="potential_cost_saving_usd">180.00</field>
+            <field name="potential_energy_saving_kwh">2.5</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="sample_suggestion_02" model="ai_token_tracker.suggestion">
+            <field name="model_to_replace_id" ref="model_gpt_4o"/>
+            <field name="suggested_model_id" ref="model_gpt_4_turbo"/>
+            <field name="potential_cost_saving_usd">250.00</field>
+            <field name="potential_energy_saving_kwh">3.8</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="sample_suggestion_03" model="ai_token_tracker.suggestion">
+            <field name="model_to_replace_id" ref="model_claude_3_5_sonnet"/>
+            <field name="suggested_model_id" ref="model_llama_3_70b"/>
+            <field name="potential_cost_saving_usd">120.00</field>
+            <field name="potential_energy_saving_kwh">1.8</field>
+            <field name="state">reviewing</field>
+        </record>
+
+        <record id="sample_suggestion_04" model="ai_token_tracker.suggestion">
+            <field name="model_to_replace_id" ref="model_gemini_1_5_pro"/>
+            <field name="suggested_model_id" ref="model_gemini_1_5_flash"/>
+            <field name="potential_cost_saving_usd">85.00</field>
+            <field name="potential_energy_saving_kwh">1.2</field>
+            <field name="state">new</field>
+        </record>
+
+        <record id="sample_suggestion_05" model="ai_token_tracker.suggestion">
+            <field name="model_to_replace_id" ref="model_claude_3_opus"/>
+            <field name="suggested_model_id" ref="model_claude_3_haiku"/>
+            <field name="potential_cost_saving_usd">315.00</field>
+            <field name="potential_energy_saving_kwh">5.5</field>
+            <field name="actual_cost_saving_usd">315.00</field>
+            <field name="actual_energy_saving_kwh">5.5</field>
+            <field name="state">implemented</field>
+        </record>
+    </data>
+</odoo>

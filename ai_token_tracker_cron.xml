@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="cron_ai_optimization_analysis" model="ir.cron">
+            <field name="name">AI Token Tracker: Run Optimization Analysis</field>
+            <field name="model_id" ref="model_ai_token_tracker_suggestion"/>
+            <field name="state">code</field>
+            <field name="code">model._run_optimization_analysis()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="nextcall" eval="(datetime.now() + timedelta(days=1)).strftime('%Y-%m-%d 03:00:00')" />
+        </record>
+    </data>
+</odoo>
