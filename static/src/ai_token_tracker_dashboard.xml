@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ai_token_tracker.Dashboard" owl="1">
+        <div class="o_ai_token_tracker_dashboard container-fluid p-3">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h1 class="h4 mb-0">AI-CSR &amp; Efficiency Dashboard</h1>
+                <div class="col-3">
+                    <select class="form-select form-select-sm" t-on-change="onDateFilterChange">
+                        <option value="this_month" t-att-selected="state.date_filter == 'this_month'">This Month</option>
+                        <option value="last_30_days" t-att-selected="state.date_filter == 'last_30_days'">Last 30 Days</option>
+                        <option value="this_quarter" t-att-selected="state.date_filter == 'this_quarter'">This Quarter</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row g-2 mb-2">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card shadow-sm p-2 h-100" role="button" t-on-click="openLogs">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-muted mb-1" style="font-size: 0.85rem;">Total AI Spend</h6>
+                            <p class="card-text fs-4 fw-bold text-primary mb-0">
+                                $<t t-esc="state.kpis.total_cost_usd"/>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card shadow-sm p-2 h-100" role="button" t-on-click="openLogs">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-muted mb-1" style="font-size: 0.85rem;">Total Energy Consumed</h6>
+                            <p class="card-text fs-4 fw-bold text-warning mb-0">
+                                <t t-esc="state.kpis.total_energy_kwh"/> kWh
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card shadow-sm p-2 h-100" role="button" t-on-click="openLogs">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-muted mb-1" style="font-size: 0.85rem;">Total CO₂ Footprint</h6>
+                            <p class="card-text fs-4 fw-bold text-danger mb-0">
+                                <t t-esc="state.kpis.total_co2_kg"/> kg
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card shadow-sm p-2 h-100 bg-light-success" role="button" t-on-click="openOptimizations">
+                        <div class="card-body p-2">
+                            <h6 class="card-title text-muted mb-1" style="font-size: 0.85rem;">Energy Saved (Actual)</h6>
+                            <p class="card-text fs-4 fw-bold text-success mb-0">
+                                <t t-esc="state.kpis.total_savings_kwh"/> kWh
+                            </p>
+                            <small class="text-muted" style="font-size: 0.75rem;">
+                                $<t t-esc="state.kpis.total_savings_usd"/> saved
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<!-- Forecast Card Row -->
+                <div class="row g-2 mb-2">
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm p-2 h-100"
+                             t-attf-class="card shadow-sm p-2 h-100 border-2 #{state.kpis.budget_health == 'danger' ? 'border-danger' : state.kpis.budget_health == 'warning' ? 'border-warning' : 'border-success'}">
+                            <div class="card-body p-2">
+                                <div class="d-flex justify-content-between align-items-start mb-2">
+                                    <div>
+                                        <h6 class="card-title text-muted mb-0" style="font-size: 0.9rem;">Projected Period-End</h6>
+                                        <small class="text-muted" style="font-size: 0.75rem;">
+                                            <t t-esc="state.kpis.days_elapsed"/> days elapsed, <t t-esc="state.kpis.days_remaining"/> remaining
+                                        </small>
+                                    </div>
+                                    <span t-if="state.kpis.budget_health == 'good'" 
+                                          class="badge bg-success" style="font-size: 0.7rem;">✓ On Track</span>
+                                    <span t-elif="state.kpis.budget_health == 'warning'" 
+                                          class="badge bg-warning" style="font-size: 0.7rem;">⚠ At Limit</span>
+                                    <span t-else="" 
+                                          class="badge bg-danger" style="font-size: 0.7rem;">⚠ Over Risk</span>
+                                </div>
+                                
+                                <div class="row mb-2">
+                                    <div class="col-6">
+                                        <p class="text-muted mb-0" style="font-size: 0.75rem;">Projected Spend</p>
+                                        <p class="fs-5 fw-bold text-info mb-0">
+                                            $<t t-esc="state.kpis.predicted_spend"/>
+                                        </p>
+                                    </div>
+                                    <div class="col-6">
+                                        <p class="text-muted mb-0" style="font-size: 0.75rem;">Monthly Budget</p>
+                                        <p class="fs-5 fw-bold text-secondary mb-0">
+                                            $<t t-esc="state.kpis.total_budget"/>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <small class="text-muted" style="font-size: 0.75rem;">Budget Utilization</small>
+                                        <small class="fw-bold" style="font-size: 0.75rem;">
+                                            <t t-esc="state.kpis.projected_utilization"/>%
+                                        </small>
+                                    </div>
+                                    <div class="progress" style="height: 18px;">
+                                        <div class="progress-bar" 
+                                             role="progressbar"
+                                             t-att-style="'width: ' + state.kpis.projected_utilization + '%'"
+                                             t-att-class="'progress-bar ' + (state.kpis.budget_health == 'good' ? 'bg-success' : state.kpis.budget_health == 'warning' ? 'bg-warning' : 'bg-danger')"
+                                             style="font-size: 0.75rem;">
+                                            <t t-esc="state.kpis.projected_utilization"/>%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-lg-6">
+                        <div class="card shadow-sm p-2 h-100">
+                            <div class="card-body p-2">
+                                <h6 class="card-title text-muted mb-2" style="font-size: 0.9rem;">Projected Energy Usage</h6>
+                                <p class="fs-5 fw-bold text-warning mb-1">
+                                    <t t-esc="state.kpis.predicted_energy"/> kWh
+                                </p>
+                                <small class="text-muted" style="font-size: 0.75rem;">
+                                    Current: <t t-esc="state.kpis.total_energy_kwh"/> kWh
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row g-2">
+                    <div class="col-lg-7 col-md-12">
+                        <div class="card shadow-sm p-2">
+                            <div class="card-body p-2" style="height: 280px;">
+                                <canvas t-ref="energyByModelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 col-md-12">
+                        <div class="card shadow-sm p-2">
+                            <div class="card-body p-2" style="height: 280px; display: flex; align-items: center; justify-content: center;">
+                                <canvas t-ref="costByPurposeChart" style="max-height: 260px;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </t>
+</templates>
