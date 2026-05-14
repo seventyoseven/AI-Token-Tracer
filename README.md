@@ -1,367 +1,358 @@
-# AI-CSR Monitor - AI Token Tracker for Odoo 19
+# AI-CSR Monitor
 
-## Overview
+**AI token tracking and environmental accountability for Odoo 19.**
 
-The AI-CSR Monitor is a comprehensive Odoo 19 module designed to track AI API usage, costs, and Corporate Social Responsibility (CSR) metrics including energy consumption and carbon footprint. This module helps organizations monitor their AI spending, optimize model selection, and measure the environmental impact of their AI operations.
+Track every API call across OpenAI, Anthropic, Google, Mistral, and Cohere — with real-time cost, energy, and CO₂ metrics built in. Designed for the Odoo Hackathon 2025 CSR & Sustainability Tracker challenge.
+
+---
+
+## Contents
+
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Configuration](#configuration)
+- [Usage](#usage)
+- [API Reference](#api-reference)
+- [Permissions](#permissions)
+- [Troubleshooting](#troubleshooting)
+- [Data Model](#data-model)
+- [Development](#development)
+- [License](#license)
+
+---
 
 ## Features
 
-### 📊 Comprehensive Monitoring
-- **Multi-Provider Support**: Track usage across OpenAI, Anthropic, Google AI, Mistral, Cohere, and more
-- **Real-Time Tracking**: Monitor API calls, token usage, and costs in real-time
-- **Budget Management**: Set monthly budgets with automated alerts
-- **Usage Analytics**: Detailed logs with pivot tables, graphs, and dashboards
+| Category | What's included |
+|---|---|
+| **Multi-provider tracking** | OpenAI, Anthropic, Google AI, Mistral, Cohere — extensible to any provider |
+| **Cost management** | Per-call cost calculation, monthly budgets, automated email alerts |
+| **CSR metrics** | Energy (kWh), CO₂ (kg), region-specific grid carbon intensity |
+| **Analytics** | Dashboard, pivot tables, graphs — all native Odoo views |
+| **API integration** | JSON-RPC endpoints for programmatic logging and status checks |
+| **Security** | AES-256 API key encryption, three-tier access control, analytic account linking |
 
-### 🌱 CSR & Environmental Tracking
-- **Energy Consumption**: Track energy usage (kWh) per API call
-- **Carbon Footprint**: Calculate CO2 emissions based on data center location
-- **Grid Intensity**: Support for region-specific carbon intensity data
-- **Sustainability Reports**: Monthly CSR reports with environmental impact metrics
+---
 
-### 💰 Cost Optimization
-- **Performance Tiers**: Models categorized by performance level
-- **Cost Comparison**: Compare pricing across different models
-- **Optimization Recommendations**: API endpoint to suggest cheaper alternatives
-- **Budget Alerts**: Automated email notifications when approaching budget limits
+## Prerequisites
 
-### 🔒 Security & Integration
-- **API Key Encryption**: Secure AES-256 encryption for API keys
-- **Accounting Integration**: Link to Odoo's analytic accounts
-- **User Permissions**: Three-tier access control (User, Manager, Administrator)
-- **RESTful API**: JSON endpoints for external integrations
+- Odoo 19.0 (Community or Enterprise)
+- Python 3.10+
+- `pycryptodome` for API key encryption
+
+---
 
 ## Installation
 
-### Prerequisites
-
-1. **Odoo 19.0** (Community or Enterprise)
-2. **Python 3.10+**
-3. **pycryptodome** library for encryption
-
-### Install Dependencies
+### 1. Install Python dependency
 
 ```bash
 pip install pycryptodome
 ```
 
-For Odoo.sh deployments, add to your `requirements.txt`:
+For Odoo.sh, add to `requirements.txt`:
+
 ```
 pycryptodome>=3.19.0
 ```
 
-### Install Module
+### 2. Add the module
 
-1. Copy the `AI_token_tracker` folder to your Odoo addons directory
-2. Restart your Odoo server
-3. Update the apps list: Go to Apps → Update Apps List
-4. Search for "AI-CSR Monitor"
-5. Click "Install"
+Copy the `AI_token_tracker` folder into your Odoo addons directory.
+
+### 3. Install in Odoo
+
+```
+Restart Odoo server
+→ Apps → Update Apps List
+→ Search "AI-CSR Monitor"
+→ Install
+```
+
+---
 
 ## Configuration
 
-### 1. Set Up Providers
+### Providers
 
-Navigate to **AI Monitor → Configuration → Providers**
+**AI Monitor → Configuration → Providers**
 
-The module comes pre-configured with major AI providers:
-- OpenAI
-- Anthropic
-- Google AI
-- Mistral AI
-- Cohere
+Five providers are pre-loaded: OpenAI, Anthropic, Google AI, Mistral AI, Cohere. Add custom providers by clicking **Create** and supplying a name, short code, API base URL, and website.
 
-### 2. Configure AI Models
+### AI Models
 
-Navigate to **AI Monitor → Configuration → AI Models**
+**AI Monitor → Configuration → AI Models**
 
-Pre-configured models include:
-- GPT-4 Turbo, GPT-4, GPT-3.5 Turbo (OpenAI)
-- Claude 3 Opus, Sonnet, Haiku (Anthropic)
-- Gemini Pro, Ultra (Google)
-- Mistral Large, Medium, Small
+Pre-loaded models:
 
-Each model includes:
-- Cost per 1K tokens (input/output)
-- Energy consumption data
-- Performance tier classification
-- Context window size
+| Model | Provider | Tier |
+|---|---|---|
+| GPT-4 Turbo, GPT-4, GPT-3.5 Turbo | OpenAI | High / Standard / Economy |
+| Claude 3 Opus, Sonnet, Haiku | Anthropic | High / Standard / Economy |
+| Gemini Ultra, Pro | Google | High / Standard |
+| Mistral Large, Medium, Small | Mistral | High / Standard / Economy |
 
-### 3. Set Up Grid Carbon Intensity
+Each model record stores input/output cost per 1K tokens, energy consumption (Wh/1K tokens), context window size, and max output tokens.
 
-Navigate to **AI Monitor → Configuration → Grid Carbon Intensity**
+### Grid Carbon Intensity
 
-Pre-configured regions:
-- US East (Virginia): 388 gCO2/kWh
-- US West (Oregon): 224 gCO2/kWh
-- EU West (Ireland): 315 gCO2/kWh
-- Asia Pacific (Singapore): 408 gCO2/kWh
-- Canada (Montreal): 34 gCO2/kWh
+**AI Monitor → Configuration → Grid Carbon Intensity**
 
-Add custom regions as needed for your data centers.
+Pre-loaded regions and intensities:
 
-### 4. Create Subscriptions
+| Region | gCO₂/kWh |
+|---|---|
+| US East (Virginia) | 388 |
+| US West (Oregon) | 224 |
+| EU West (Ireland) | 315 |
+| Asia Pacific (Singapore) | 408 |
+| Canada (Montreal) | 34 |
 
-Navigate to **AI Monitor → Operations → Subscriptions**
+Add custom regions using your data center's published carbon intensity figures.
 
-For each AI service subscription:
-1. Enter subscription name
-2. Select provider
-3. Set monthly budget
-4. Configure alert threshold (default: 80%)
-5. Add API key (encrypted automatically)
-6. Select data center region for CO2 calculations
-7. Optionally link to an analytic account
-8. Activate the subscription
+### Subscriptions
+
+**AI Monitor → Operations → Subscriptions**
+
+Create one subscription per AI service contract:
+
+1. Enter a subscription name and select the provider.
+2. Set a monthly budget and alert threshold (default 80%).
+3. Paste your API key — it is encrypted with AES-256 on save.
+4. Select the data center region used for CO₂ calculations.
+5. Optionally link to an Odoo analytic account.
+6. Click **Activate**.
+
+---
 
 ## Usage
 
-### Manual Usage Logging
+### Manual log entry
 
-Navigate to **AI Monitor → Operations → Usage Logs** and create a new record:
-- Select subscription
-- Select AI model
-- Enter input/output tokens
-- Cost and CSR metrics are calculated automatically
+**AI Monitor → Operations → Usage Logs → Create**
 
-### API Integration
+Select a subscription and model, enter input and output token counts. Cost, energy, and CO₂ fields populate automatically.
 
-Use the JSON-RPC API to log usage programmatically:
+### Programmatic logging
+
+POST to the log endpoint from any application:
 
 ```python
-import requests
-import json
+import requests, json
 
-url = "http://your-odoo-instance.com/ai_monitor/api/log_usage"
-headers = {"Content-Type": "application/json"}
-
-data = {
+payload = {
     "jsonrpc": "2.0",
     "method": "call",
+    "id": 1,
     "params": {
         "subscription_id": 1,
         "model_id": 5,
         "input_tokens": 1500,
         "output_tokens": 800,
-        "application": "My Application",
-        "request_id": "req_12345"
-    },
-    "id": 1
+        "application": "My App",
+        "request_id": "req_abc123"
+    }
 }
 
-response = requests.post(url, headers=headers, data=json.dumps(data))
-result = response.json()
-print(f"Cost: ${result['result']['cost']:.4f}")
-print(f"Energy: {result['result']['energy_kwh']:.4f} kWh")
-print(f"CO2: {result['result']['co2_kg']:.4f} kg")
+r = requests.post(
+    "https://your-odoo.com/ai_monitor/api/log_usage",
+    headers={"Content-Type": "application/json"},
+    data=json.dumps(payload)
+)
+
+result = r.json()["result"]
+print(f"Cost:   ${result['cost']:.4f}")
+print(f"Energy: {result['energy_kwh']:.4f} kWh")
+print(f"CO₂:    {result['co2_kg']:.4f} kg")
 ```
 
-### Check Subscription Status
+### Dashboard
 
-```python
-url = "http://your-odoo-instance.com/ai_monitor/api/subscription/status/1"
-response = requests.post(url, headers=headers, data=json.dumps({
-    "jsonrpc": "2.0",
-    "method": "call",
-    "params": {},
-    "id": 1
-}))
-status = response.json()['result']['data']
-print(f"Budget used: {status['budget_consumption_pct']:.1f}%")
-print(f"Over budget: {status['over_budget']}")
-```
+**AI Monitor → Dashboard**
 
-### Get Model Recommendations
+At a glance: active subscriptions, month-to-date spend, total energy and CO₂, budget warnings, top models by call volume, and a feed of recent usage entries.
 
-```python
-url = "http://your-odoo-instance.com/ai_monitor/api/models/recommend"
-data = {
-    "jsonrpc": "2.0",
-    "method": "call",
-    "params": {
-        "current_model_id": 5
-    },
-    "id": 1
+---
+
+## API Reference
+
+All endpoints use JSON-RPC 2.0 and require an authenticated Odoo session or API key.
+
+### `POST /ai_monitor/api/log_usage`
+
+Record a single API call event.
+
+**Request params**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `subscription_id` | integer | ✓ | ID of the active subscription |
+| `model_id` | integer | ✓ | ID of the AI model used |
+| `input_tokens` | integer | ✓ | Prompt token count |
+| `output_tokens` | integer | ✓ | Completion token count |
+| `application` | string | | Calling application name |
+| `request_id` | string | | Upstream request identifier |
+
+**Response**
+
+```json
+{
+  "result": {
+    "log_id": 42,
+    "cost": 0.0312,
+    "energy_kwh": 0.0018,
+    "co2_kg": 0.0007
+  }
 }
-response = requests.post(url, headers=headers, data=json.dumps(data))
-recommendations = response.json()['result']['recommendations']
-for rec in recommendations:
-    print(f"{rec['name']}: {rec['savings_pct']:.1f}% savings")
 ```
 
-## Dashboard
+---
 
-Navigate to **AI Monitor → Dashboard** to view:
-- **Key Metrics**: Active subscriptions, monthly costs, energy usage, CO2 emissions
-- **Budget Alerts**: Visual warnings for subscriptions over budget
-- **Top Models**: Most frequently used AI models
-- **Active Subscriptions**: Budget consumption progress bars
-- **Recent Usage**: Latest API calls with cost and token details
+### `GET /ai_monitor/api/subscription/status/<id>`
 
-## Automated Features
+Fetch budget and usage summary for one subscription.
 
-### Budget Alerts
+**Response**
 
-The module automatically checks budgets every hour. When a subscription reaches its alert threshold:
-- An email is sent to the subscription creator
-- The dashboard displays a warning banner
-- Budget consumption is highlighted in red
-
-### Monthly Reports
-
-On the 1st of each month at 9:00 AM, the system sends CSR reports for all active subscriptions including:
-- Total API calls
-- Total cost and budget consumption
-- Energy consumption (kWh)
-- Carbon emissions (kg CO2)
-
-### Scheduled Actions
-
-Configure in **Settings → Technical → Automation → Scheduled Actions**:
-- `AI Monitor: Check Budget Alerts` (every hour)
-- `AI Monitor: Send Monthly Reports` (monthly)
-- `AI Monitor: Archive Old Usage Logs` (weekly, disabled by default)
-
-## Security & Permissions
-
-### User Groups
-
-1. **AI Monitor User**
-   - View subscriptions and usage logs
-   - Create usage logs
-   - View dashboard
-
-2. **AI Monitor Manager**
-   - All User permissions
-   - Create/modify subscriptions
-   - Activate/suspend subscriptions
-   - Manage providers and models
-
-3. **AI Monitor Administrator**
-   - All Manager permissions
-   - Manage grid carbon intensity data
-   - Configure system settings
-
-### Assigning Permissions
-
-Go to **Settings → Users & Companies → Users**:
-1. Select a user
-2. Go to the "Access Rights" tab
-3. Assign appropriate AI Monitor group
-
-## API Endpoints
-
-All endpoints use JSON-RPC 2.0 format and require user authentication.
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/ai_monitor/api/log_usage` | POST | Log an API usage event |
-| `/ai_monitor/api/subscription/status/<id>` | GET | Get subscription status |
-| `/ai_monitor/api/models/recommend` | POST | Get model recommendations |
-
-## Data Model
-
-### Main Models
-
-- `ai_monitor.provider`: AI service providers
-- `ai_monitor.model`: AI models with pricing and energy data
-- `ai_monitor.grid_intensity`: Carbon intensity by region
-- `ai_monitor.subscription`: User subscriptions with budgets
-- `ai_monitor.usage_log`: Individual API call records
-
-### Key Relationships
-
+```json
+{
+  "result": {
+    "data": {
+      "name": "Production - OpenAI",
+      "monthly_budget": 500.0,
+      "current_spend": 187.43,
+      "budget_consumption_pct": 37.5,
+      "over_budget": false
+    }
+  }
+}
 ```
-provider (1) -----> (*) model
-provider (1) -----> (*) subscription
-subscription (1) --> (*) usage_log
-model (1) ---------> (*) usage_log
-grid_intensity (1) -> (*) subscription
+
+---
+
+### `POST /ai_monitor/api/models/recommend`
+
+Return cheaper models that could replace the current one.
+
+**Request params**
+
+| Field | Type | Required | Description |
+|---|---|---|---|
+| `current_model_id` | integer | ✓ | ID of the model to compare against |
+
+**Response**
+
+```json
+{
+  "result": {
+    "recommendations": [
+      { "id": 3, "name": "GPT-3.5 Turbo", "savings_pct": 92.0 },
+      { "id": 7, "name": "Claude 3 Haiku", "savings_pct": 87.5 }
+    ]
+  }
+}
 ```
+
+---
+
+## Permissions
+
+Three groups control access. Assign them under **Settings → Users → Access Rights**.
+
+| Group | Capabilities |
+|---|---|
+| **AI Monitor User** | View subscriptions and logs, create usage log entries, view dashboard |
+| **AI Monitor Manager** | All User rights + create/edit subscriptions, activate/suspend, manage providers and models |
+| **AI Monitor Administrator** | All Manager rights + manage grid carbon intensity data, configure system settings |
+
+---
+
+## Automated Actions
+
+| Action | Schedule | Purpose |
+|---|---|---|
+| Check Budget Alerts | Hourly | Emails subscription owner when spend crosses the alert threshold |
+| Send Monthly Reports | 1st of month, 09:00 | CSR summary email: calls, cost, kWh, CO₂ |
+| Archive Old Usage Logs | Weekly | Disabled by default — enable for data retention compliance |
+
+Manage these under **Settings → Technical → Automation → Scheduled Actions**.
+
+---
 
 ## Troubleshooting
 
-### Module Won't Install
+### `ModuleNotFoundError: No module named 'Crypto'`
 
-**Issue**: Error about missing `Crypto` module
+Install the correct package — `pycryptodome`, not `pycrypto`:
 
-**Solution**: Install pycryptodome:
 ```bash
 pip install pycryptodome
 ```
 
-### Dashboard Not Loading
+If both are installed, remove `pycrypto` first as they conflict.
 
-**Issue**: JavaScript errors in browser console
+---
 
-**Solution**: 
-1. Clear browser cache
-2. Restart Odoo in development mode: `--dev=all`
-3. Update assets bundle
+### Dashboard shows blank or JavaScript errors
 
-### Budget Alerts Not Sending
+1. Clear browser cache and hard-reload (`Ctrl+Shift+R`).
+2. Restart Odoo with `--dev=all` to force asset regeneration.
+3. Check the browser console for specific errors and confirm Odoo 19 OWL components are loading.
 
-**Issue**: No emails received when threshold reached
+---
 
-**Solution**:
-1. Check email server configuration in Odoo
-2. Verify scheduled action is active: Settings → Technical → Scheduled Actions
-3. Check email template: AI Monitor: Budget Alert
+### Budget alert emails are not arriving
 
-### CO2 Calculations are Zero
+1. Confirm the Odoo outgoing mail server is configured and tested (**Settings → Technical → Outgoing Mail Servers**).
+2. Verify the scheduled action is active: **Settings → Technical → Automation → Scheduled Actions → AI Monitor: Check Budget Alerts**.
+3. Check that the email template `AI Monitor: Budget Alert` exists and has valid recipients.
 
-**Issue**: CO2 emissions showing as 0.00 kg
+---
 
-**Solution**:
-1. Ensure subscription has a data center region selected
-2. Verify grid intensity data exists for the region
-3. Check that models have energy consumption values configured
+### CO₂ always shows 0.00 kg
 
-## Customization
+Three fields must all be set:
 
-### Adding New Providers
+1. The subscription has a **data center region** selected.
+2. That region has a **grid intensity record** with a non-zero gCO₂/kWh value.
+3. The AI model has an **energy consumption** value (Wh per 1K tokens) greater than zero.
 
-1. Navigate to **Configuration → Providers**
-2. Click "Create"
-3. Enter provider details:
-   - Name (e.g., "Hugging Face")
-   - Code (e.g., "HUGGINGFACE")
-   - API Base URL
-   - Website
+---
 
-### Adding New Models
+## Data Model
 
-1. Navigate to **Configuration → AI Models**
-2. Click "Create"
-3. Fill in model details:
-   - Name, provider, type
-   - Performance tier
-   - Pricing (input/output cost per 1K tokens)
-   - Energy consumption (Wh per 1K tokens)
-   - Context window and max output tokens
+```
+ai_monitor.provider       One provider, many models and subscriptions
+ai_monitor.model          Pricing, energy, and capability data per model
+ai_monitor.grid_intensity Carbon intensity per geographic region
+ai_monitor.subscription   Budget, API key, and region per service contract
+ai_monitor.usage_log      One record per API call
+```
 
-### Custom Grid Intensity Data
+Relationships:
 
-1. Navigate to **Configuration → Grid Carbon Intensity**
-2. Click "Create"
-3. Enter:
-   - Region name
-   - Carbon intensity (gCO2/kWh)
-   - Data source
-   - Notes
+```
+provider ──< model
+provider ──< subscription
+grid_intensity ──< subscription
+subscription ──< usage_log
+model ──< usage_log
+```
+
+---
 
 ## Development
 
-### Module Structure
+### Module structure
 
 ```
 AI_token_tracker/
-├── __init__.py
 ├── __manifest__.py
 ├── models/
-│   ├── __init__.py
 │   ├── ai_monitor_provider.py
-│   ├── ai_monitor_grid_intensity.py
 │   ├── ai_monitor_model.py
+│   ├── ai_monitor_grid_intensity.py
 │   ├── ai_monitor_subscription.py
 │   └── ai_monitor_usage_log.py
 ├── views/
@@ -370,8 +361,8 @@ AI_token_tracker/
 │   ├── ai_monitor_subscription_views.xml
 │   ├── ai_monitor_usage_log_views.xml
 │   ├── ai_monitor_grid_intensity_views.xml
-│   ├── ai_monitor_menus.xml
-│   └── ai_monitor_dashboard_views.xml
+│   ├── ai_monitor_dashboard_views.xml
+│   └── ai_monitor_menus.xml
 ├── security/
 │   ├── security.xml
 │   └── ir.model.access.csv
@@ -381,52 +372,36 @@ AI_token_tracker/
 │   ├── ai_monitor_grid_intensity_data.xml
 │   ├── email_templates.xml
 │   └── scheduled_actions.xml
-├── demo/
-│   └── demo_data.xml
 ├── controllers/
-│   ├── __init__.py
 │   └── main.py
-├── static/src/
-│   ├── components/
-│   │   ├── dashboard.js
-│   │   └── dashboard.xml
-│   └── css/
-│       ├── dashboard.css
-│       └── kanban.css
-└── README.md
+└── static/src/
+    ├── components/
+    │   ├── dashboard.js
+    │   └── dashboard.xml
+    └── css/
+        ├── dashboard.css
+        └── kanban.css
 ```
 
-### Extending the Module
+### Extending the module
 
-To add custom functionality:
+To add new metrics or custom views:
 
-1. Create a new model that inherits from existing models
-2. Add computed fields for custom metrics
-3. Create custom views and actions
-4. Register new API endpoints in controllers
-
-## Support & Contributing
-
-### Getting Help
-
-- Check the documentation in this README
-- Review Odoo 19 official documentation
-- Contact your organization's Odoo administrator
-
-### Contributing
-
-This module is designed for the Odoo Hackathon 2025 CSR & Sustainability Tracker challenge.
-
-## License
-
-LGPL-3
-
-## Credits
-
-- **Author**: Your Organization
-- **Version**: 19.0.1.0.0
-- **Odoo Version**: 19.0
+1. Create a model that inherits from `ai_monitor.usage_log` or `ai_monitor.subscription`.
+2. Add computed fields for your custom metric.
+3. Register new views and menu items in XML.
+4. Add new JSON-RPC routes in `controllers/main.py`.
 
 ---
 
-**Note**: This module is designed for Odoo 19. It uses modern Odoo development patterns including OWL components, proper ORM usage, and follows Odoo coding guidelines.
+## License
+
+LGPL-3 — see [Odoo Community Association licensing guidelines](https://odoo-community.org/page/lgpl).
+
+---
+
+## Credits
+
+- **Version**: 19.0.1.0.0
+- **Odoo version**: 19.0
+- **Challenge**: Odoo Hackathon 2025 — CSR & Sustainability Tracker
