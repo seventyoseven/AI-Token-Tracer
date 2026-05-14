@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ai_provider_tree" model="ir.ui.view">
+        <field name="name">ai_token_tracker.provider.tree</field>
+        <field name="model">ai_token_tracker.provider</field>
+        <field name="arch" type="xml">
+            <list string="AI Providers">
+                <field name="name"/>
+                <field name="website"/>
+                <field name="grid_intensity_id"/>
+            </list>
+        </field>
+    </record>
+    
+    <record id="view_ai_provider_form" model="ir.ui.view">
+        <field name="name">ai_token_tracker.provider.form</field>
+        <field name="model">ai_token_tracker.provider</field>
+        <field name="arch" type="xml">
+            <form string="AI Provider">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="website" widget="url"/>
+                        <field name="grid_intensity_id"/>
+                    </group>
+                    <notebook>
+                        <page string="Models">
+                            <field name="model_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="model_key"/>
+                                    <field name="performance_tier"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes">
+                            <field name="notes" placeholder="Provider notes..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+</odoo>
