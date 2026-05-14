@@ -1,0 +1,52 @@
+/* Kanban Card Styling */
+.o_kanban_view .oe_kanban_card {
+    border-radius: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.o_kanban_view .oe_kanban_card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.o_kanban_card_header {
+    padding: 1rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.o_kanban_card_content {
+    padding: 1rem;
+}
+
+.o_kanban_card_header_title .o_primary {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #212529;
+}
+
+.o_kanban_card_header_title .o_secondary {
+    font-size: 0.875rem;
+    color: #6c757d;
+    margin-top: 0.25rem;
+}
+
+/* Border colors for different states */
+.border-primary {
+    border-left: 4px solid #0d6efd !important;
+}
+
+.border-info {
+    border-left: 4px solid #0dcaf0 !important;
+}
+
+.border-success {
+    border-left: 4px solid #198754 !important;
+}
+
+.border-warning {
+    border-left: 4px solid #ffc107 !important;
+}
+
+.border-danger {
+    border-left: 4px solid #dc3545 !important;
+}
